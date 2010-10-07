@@ -273,7 +273,7 @@ void User_Event_Log::write_name_row(AddEntryInfo_ptr info,
 
     np_store->put(NAME_TABLE_NAME, r, 
         boost::bind(&User_Event_Log::write_callback,this,_1,info));  
-  } catch (exception &e) { 
+  } catch (std::exception &e) { 
     lg.err("Error writing row for uid %"PRId64", logid = %"PRId64" : %s \n", 
           p.id , logid, e.what()); 
   } 
@@ -423,7 +423,7 @@ void User_Event_Log::read_main_cb(const storage::Result & result, const storage:
               this, _1,_2,_3,info));  
         return; // return if no problems...
 
-      } catch (exception &e) {
+      } catch (std::exception &e) {
         lg.err("Exception reading main row for logid = %"PRId64": %s \n", 
             info->logid, e.what());
       } 
@@ -452,7 +452,7 @@ void User_Event_Log::read_names_cb(const storage::Result & result, const storage
         else
           info->dst_names.push_back(p); 
 
-      } catch (exception &e) {
+      } catch (std::exception &e) {
         lg.err("Exception read name row for logid = %"PRId64": %s \n", 
             info->logid, e.what()); 
       }
@@ -497,7 +497,7 @@ void User_Event_Log::get_logids_cb(const storage::Result & result, const storage
       try { 
           int64_t id = Storage_Util::get_col_as_type<int64_t>(row,"logid");
           info->logids.push_back(id);
-      } catch (exception &e) {
+      } catch (std::exception &e) {
         lg.err("Exception in get_logids: %s \n", e.what()); 
       }
 

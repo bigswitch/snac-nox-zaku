@@ -41,7 +41,7 @@ import time
 import copy
 
 LLDP_TTL             = 120 # currently ignored
-LLDP_SEND_PERIOD     = .10 
+LLDP_SEND_PERIOD     = 1.0 
 TIMEOUT_CHECK_PERIOD = 5.
 LINK_TIMEOUT         = 10.
 
@@ -55,7 +55,7 @@ lg = logging.getLogger('discovery')
 # 
 # ---------------------------------------------------------------------- 
   
-def create_discovery_packet(dpid, portno, ttl_):    
+def create_discovery_packet(dpid, portno, hw_addr, ttl_):    
 
     # Create lldp packet
     discovery_packet = lldp()
@@ -76,9 +76,12 @@ def create_discovery_packet(dpid, portno, ttl_):
     discovery_packet.add_tlv(end_tlv())
 
     eth = ethernet()
-    # To insure that the LLDP src mac address is not a multicast
-    # address, since we have no control on choice of dpid
-    eth.src = '\x00' + struct.pack('!Q',dpid)[3:8]
+    # If the switch is reporting MAC address same as DPID, then we
+    # should try to distinguish from it somehow using local MAC addr
+    if hw_addr == struct.pack('!Q',dpid)[2:8]:
+        eth.src = struct.pack('!Q', dpid | 0x020000000000)[2:8]
+    else:
+        eth.src = hw_addr
     eth.dst = NDP_MULTICAST
     eth.set_payload(discovery_packet)
     eth.type = ethernet.LLDP_TYPE
@@ -179,7 +182,7 @@ class discovery(Component):
         for port in stats[PORTS]:
             if port[PORT_NO] == OFPP_LOCAL:
                 continue
-            self.lldp_packets[dp][port[PORT_NO]] = create_discovery_packet(dp, port[PORT_NO], LLDP_TTL);
+            self.lldp_packets[dp][port[PORT_NO]] = create_discovery_packet(dp, port[PORT_NO], port[HW_ADDR], LLDP_TTL);
 
     # --
     # On datapath leave, delete all associated links
@@ -218,7 +221,7 @@ class discovery(Component):
         # Only process 'sane' ports
         if port[PORT_NO] <= openflow.OFPP_MAX:
             if reason == openflow.OFPPR_ADD:
-                self.lldp_packets[dp][port[PORT_NO]] = create_discovery_packet(dp, port[PORT_NO], LLDP_TTL);
+                self.lldp_packets[dp][port[PORT_NO]] = create_discovery_packet(dp, port[PORT_NO], port[HW_ADDR], LLDP_TTL);
             elif reason == openflow.OFPPR_DELETE:
                 del self.lldp_packets[dp][port[PORT_NO]]
 
@@ -296,7 +299,7 @@ class discovery(Component):
     
         linktuple = (dp_id, inport, chassid, portid)
     
-        if linktuple not in self.adjacency_list:
+        if linktuple not in self.adjacency_list.keys():
             self.add_link(linktuple)
             lg.warn('new link detected ('+longlong_to_octstr(linktuple[0])+' p:'\
                        +str(linktuple[1]) +' -> '+\
@@ -328,7 +331,7 @@ class discovery(Component):
                     for port in packets[dp]:
                         #print 'Sending packet out of ',longlong_to_octstr(dp), ' port ',str(port)
                         self.send_openflow_packet(dp, packets[dp][port].tostring(), port)
-                        yield dp 
+                    yield dp 
                 except Exception, e:
                     # catch exception while yielding
                     lg.error('Caught exception while yielding'+str(e))
@@ -337,7 +340,8 @@ class discovery(Component):
             
             def g():
                 try:
-                    g.sendfunc.next()
+                    while 1:
+                        g.sendfunc.next()
                 except StopIteration, e:    
                     g.sendfunc = send_lldp(copy.deepcopy(self.lldp_packets))
                 except Exception, e:    

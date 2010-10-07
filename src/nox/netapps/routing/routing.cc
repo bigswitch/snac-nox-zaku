@@ -750,7 +750,7 @@ Routing_module::setup_flow(const Flow& flow, const datapathid& dp,
     ofm->header.length = htons(sizeof(*ofm) + actions_len);
     int ret = send_openflow_command(dp, &ofm->header, false);
     bool buf_sent = false;
-    if (!ret && bid == UINT32_MAX) {
+    if (!ret && (bid == UINT32_MAX || bid == INT_MAX)) {
         buf_sent = true;
         ret = send_openflow_packet(dp, buf, ofm->actions,
                                    actions_len, inport, false);
@@ -960,7 +960,7 @@ Routing_module::send_packet(const datapathid& dp, uint16_t inport, uint16_t outp
     }
 
     int ret;
-    if (bid == UINT32_MAX) {
+    if (bid == UINT32_MAX || bid == INT_MAX) {
         ret = send_openflow_packet(dp, buf, ofm->actions,
                                    actions_len, inport, false);
     } else {

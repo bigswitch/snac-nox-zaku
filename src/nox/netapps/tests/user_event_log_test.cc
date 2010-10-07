@@ -288,7 +288,7 @@ void UserEventLogTestCase::trigger_fired(const storage::Trigger_id & tid,
       // message inserted into table should be same one that we just logged 
       BOOST_REQUIRE(cur_msg == Storage_Util::get_col_as_type<string>(r,"msg"));
       triggered_logid = Storage_Util::get_col_as_type<int64_t>(r,"logid");
-    }catch (exception &e) { 
+    }catch (std::exception &e) { 
       printf("%s \n", e.what());
       exit_test(false); 
       return;

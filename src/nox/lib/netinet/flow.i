@@ -30,6 +30,7 @@ struct Flow {
     uint32_t nw_src;        /* IP source address. */
     uint32_t nw_dst;        /* IP destination address. */
     uint8_t nw_proto;       /* IP protocol. */
+    uint8_t nw_tos;         /* TOS bit */
     uint16_t tp_src;        /* TCP/UDP source port. */
     uint16_t tp_dst;        /* TCP/UDP destination port. */
 };

@@ -113,6 +113,7 @@ public:
         NW_SRC,
         NW_DST,
         NW_PROTO,
+        NW_TOS,
         TP_SRC,
         TP_DST,
         GROUP_SRC,

@@ -333,6 +333,7 @@ class Component:
     # NW_SRC     = "nw_src"
     # NW_DST     = "nw_dst"
     # NW_PROTO   = "nw_proto"
+    # NW_TOS     = "nw_tos"
     # TP_SRC     = "tp_src"
     # TP_DST     = "tp_dst"
     #
@@ -587,7 +588,6 @@ class Component:
                 val = htons(val)
             elif key == DL_VLAN_PCP:
                 field = Packet_expr.DL_VLAN_PCP
-                val = val
             elif key == DL_TYPE:
                 field = Packet_expr.DL_TYPE
                 val = htons(val)
@@ -617,6 +617,8 @@ class Component:
                     return False
             elif key == NW_PROTO:
                 field = Packet_expr.NW_PROTO
+            elif key == NW_TOS:
+                field = Packet_expr.NW_TOS
             elif key == TP_SRC:
                 field = Packet_expr.TP_SRC
                 val = htons(val)

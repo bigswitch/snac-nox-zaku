@@ -78,6 +78,7 @@ public:
         NWSRC,
         NWDST,
         NWPROTO,
+        NWTOS,
         TPSRC,
         TPDST,
         APPLY_SIDE,

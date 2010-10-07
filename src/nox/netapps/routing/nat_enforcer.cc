@@ -159,6 +159,9 @@ get_field<Flow_expr, NAT_data>(uint32_t field, const NAT_data& data,
     case Flow_expr::NWPROTO:
         value = data.flow->nw_proto;
         return true;
+    case Flow_expr::NWTOS:
+        value = data.flow->nw_tos;
+        return true;
     case Flow_expr::TPSRC:
         value = data.flow->tp_src;
         return true;

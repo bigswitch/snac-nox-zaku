@@ -33,9 +33,9 @@ from nox.lib.directory import LocationInfo
 # Default values for the periodicity of polling for each class of
 # statistic
 
-DEFAULT_POLL_TABLE_PERIOD     = 5
-DEFAULT_POLL_PORT_PERIOD      = 5
-DEFAULT_POLL_AGGREGATE_PERIOD = 5
+DEFAULT_POLL_TABLE_PERIOD     = 30
+DEFAULT_POLL_PORT_PERIOD      = 30
+DEFAULT_POLL_AGGREGATE_PERIOD = 30
 
 lg = logging.getLogger('switchstats')
 

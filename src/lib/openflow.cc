@@ -1257,6 +1257,8 @@ Passive_tcp_openflow_connection_factory
         throw errno_exception(error, "bind");
     }
 
+    // Disabling Nagle's Algrorithm
+    socket.set_nodelay();
 
     error = socket.listen(SOMAXCONN);
     if (error) {

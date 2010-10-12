@@ -20,7 +20,7 @@ AC_DEFUN([CHECK_OPENFLOW],
      fi
      OPENFLOW_CPPFLAGS="-I$path/include"
    else
-     OPENFLOW_CPPFLAGS='-I${top_srcdir}/src/include/openflow -I${top_srcdir}/../../../src/include/openflow'
+     OPENFLOW_CPPFLAGS='-I${top_srcdir}/src/include/openflow'
    fi    
    AC_SUBST([OPENFLOW_CPPFLAGS])
 ])

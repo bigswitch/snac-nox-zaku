@@ -275,9 +275,9 @@ class webserver(Component):
          # XXX This should be abstracted out eventually.  Nothing in core
          # should depend on ext
          try:
-           from nox.ext.apps.tstorage import TStorage
+           from nox.ext.apps.storage.transactional_storage import TransactionalStorage
            from nox.ext.apps.configuration.properties import Properties
-           self.storage = self.resolve(TStorage)
+           self.storage = self.resolve(TransactionalStorage)
 
            # Store the changes to the database, if necessary.
            p = Properties(self.storage, 'nox_config', self.defaults)
@@ -352,7 +352,9 @@ class webserver(Component):
         try:
           from nox.ext.apps.configuration.properties import Properties
           p = Properties(self.storage, 'nox_config')
-          return p.load(self.configuration_changed).\
+          # FIXME: robv: Changing to work with new args to load. Not sure if this is right.
+          #return p.load(self.configuration_changed).\
+          return p.load().\
               addCallback(self.reconfigure_listeners, p).\
               addErrback(self.restart_error)
         except ImportError, e:

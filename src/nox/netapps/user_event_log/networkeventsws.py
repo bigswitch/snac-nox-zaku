@@ -19,7 +19,7 @@
 from nox.lib.core import *
 from twisted.python.failure import Failure
 from nox.webapps.webserver.webauth import Capabilities
-from nox.ext.apps.commonui.authui import UISection, UIResource
+from nox.ext.apps.coreui.authui import UISection, UIResource
 from nox.webapps.webserver import webauth
 from nox.webapps.webserver.webserver import *
 from nox.webapps.webservice.webservice import *

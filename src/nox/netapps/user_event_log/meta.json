@@ -25,13 +25,6 @@
             ]
         },
         {
-            "name": "UI_user_event_log" ,
-            "dependencies": [
-                "pystorage"
-            ],
-            "python": "nox.netapps.user_event_log.UI_user_event_log"
-        },
-        {
             "name": "pyuser_event_log" ,
             "dependencies": [
                 "user_event_log",

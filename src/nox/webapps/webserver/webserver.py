@@ -352,9 +352,9 @@ class webserver(Component):
         try:
           from nox.ext.apps.configuration.properties import Properties
           p = Properties(self.storage, 'nox_config')
-          # FIXME: robv: Changing to work with new args to load. Not sure if this is right.
-          #return p.load(self.configuration_changed).\
-          return p.load().\
+          # FIXME: robv: Reverting to old core from coreui. Not sure if this is correct.
+          return p.addCallback(self.configuration_changed).\
+              addCallback(lambda trigger: p.load()).\
               addCallback(self.reconfigure_listeners, p).\
               addErrback(self.restart_error)
         except ImportError, e:

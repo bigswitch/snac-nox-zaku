@@ -16,8 +16,8 @@
 # along with NOX.  If not, see <http://www.gnu.org/licenses/>.
 from twisted.python import log
 
-from nox.apps.ndb import API, GetOp, PutOp
-from nox.apps.tests import unittest
+from nox.ext.apps.ndb import API, GetOp, PutOp
+from nox.netapps.tests import unittest
 
 pyunit = __import__('unittest')
 

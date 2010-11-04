@@ -1,7 +1,7 @@
 import array
 from nox.lib.packet.ethernet import *
-from nox.apps.tests import unittest
-from nox.apps.pf import *
+from nox.netapps.tests import unittest
+from nox.ext.apps.pf import *
 
 ether_tcp_str = \
 """\
@@ -32,7 +32,7 @@ class PFTestCase(unittest.TestCase):
         return str(PFTestCase)    
 
     def configure(self, config):
-        from nox.apps.pf.pypf import PyPF
+        from nox.ext.apps.pf.pypf import PyPF
         self.pf = self.resolve(PyPF)
 
     def setUp(self):
